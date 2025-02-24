@@ -1,5 +1,7 @@
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from aiogram import Bot
+
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -11,4 +13,5 @@ class Settings(BaseSettings):
     
 settings = Settings()
  
-    
+
+BOT = Bot(token=settings.token)
