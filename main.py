@@ -1,7 +1,8 @@
 from aiogram import Dispatcher
 import asyncio
 from config import settings, BOT
-from bot.reg.handlers import rt
+# from bot.reg.handlers import rt
+from bot.moderation.handlers import rt
 
 from data.orm import Orm
 
