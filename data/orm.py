@@ -10,11 +10,10 @@ from data.models import Man, Woman
 class Orm:
     @staticmethod
     async def create_all():
-        # print("Таблицы в metadata:", Base.metadata.tables.keys())
         async with async_engine.begin() as conn:
             async_engine.echo = False
             await conn.run_sync(Base.metadata.drop_all)
-            # print('tables dropped')
+            print('tables dropped')
             await conn.run_sync(Base.metadata.create_all)
             print('tables created')
             async_engine.echo = True

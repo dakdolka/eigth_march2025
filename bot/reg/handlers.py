@@ -4,7 +4,7 @@ from aiogram.filters import CommandStart, Command, callback_data
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
-import bot.keyboards as kb
+import bot.reg.keyboards as kb
 
 from data.orm import Orm
 

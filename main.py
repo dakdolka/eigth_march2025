@@ -1,7 +1,7 @@
 from aiogram import Bot, Dispatcher
 import asyncio
 from config import settings
-from bot.handlers import rt
+from bot.reg.handlers import rt
 
 from data.orm import Orm
 

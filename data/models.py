@@ -9,7 +9,7 @@ from typing import Annotated, Optional
 
 class Woman(Base):
     __tablename__ = "woman"
-
+    
     tg_id: Mapped[str] = mapped_column(primary_key=True)
     description: Mapped[str]
     reg_time: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now())
@@ -22,7 +22,7 @@ class Man(Base):
     tg_id: Mapped[int] = mapped_column(primary_key=True)
     
     aim: Mapped["Woman"] = relationship(back_populates="delivers")
-    circle: Mapped[int] = mapped_column(default=0)
+    circle: Mapped[str] = mapped_column(default="")
     is_sent: Mapped[bool] = mapped_column(default=False)
     woman_aim: Mapped[str] = mapped_column(ForeignKey("woman.tg_id"))
     
