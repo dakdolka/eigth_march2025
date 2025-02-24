@@ -11,4 +11,4 @@ rt = Router()
 
 @rt.message(CommandStart())
 async def echo(message: Message):
-    await message.answer(text=message.chat.id, reply_markup=None)
+    await message.answer(text=str(message.chat.id) + ' ' + str(message.message_thread_id), reply_markup=None)
