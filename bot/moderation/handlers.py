@@ -14,10 +14,16 @@ class System(StatesGroup):
     cancel_changes = State()
 
 
+@rt.message(CommandStart())
+async def echo(message: Message):
+    await message.answer(text=f'thread id: {message.message_thread_id}')
+
+
 # Отлов кружочков (потом будет в регистрации, сейчас для отладки)
 @rt.message(F.content_type == ContentType.VIDEO_NOTE)
 async def echo(message: Message):
     await crud.insert_note(message.video_note.file_id, message.from_user.id)
+    await message.answer(text='Спасибо за кружочек! Мы отправили его на модерацию')
     await BOT.send_video_note(
         chat_id=settings.group_id, 
         message_thread_id=settings.not_approved_thread_id, 
@@ -26,6 +32,7 @@ async def echo(message: Message):
             id=message.from_user.id
         )
     )
+    
 
 
 # Если подтверждено
@@ -80,7 +87,8 @@ async def reject(callback: CallbackQuery, state: FSMContext, callback_data: kb.A
         video_note_message_id = note.message_id,
         dop_message_id = message.message_id,
         user_id = callback_data.id,
-        is_approved_earlier = callback.message.message_thread_id == settings.approved_thread_id
+        is_approved_earlier = callback.message.message_thread_id == settings.approved_thread_id,
+        video_note_id = video_note_id
     )
 
 
@@ -111,6 +119,7 @@ async def add_description(message: Message, state: FSMContext):
     dop_message_id = await state.get_value('dop_message_id')
     user_id = await state.get_value('user_id')
     is_approved_earlier = await state.get_value('is_approved_earlier')
+    video_note_id = await state.get_value('video_note_id')
     await state.clear()
     
     # Подбор текста
@@ -131,6 +140,16 @@ async def add_description(message: Message, state: FSMContext):
     await BOT.send_message(
         chat_id=user_id,
         text=f'{text} Вот причина:\n\n{message.text[2:]}\n\nПопробуйте еще раз!'
+    )
+    await BOT.send_message(
+        chat_id=message.chat.id,
+        message_thread_id=settings.rejected_thread_id,
+        text=f'===========\n\nКружок ниже отклонен по причине:\n\n{message.text[2:]}'
+    )
+    await BOT.send_video_note(
+        chat_id=message.chat.id,
+        message_thread_id=settings.rejected_thread_id,
+        video_note=video_note_id
     )
 
     await message.delete()

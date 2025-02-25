@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     group_id: int = -1002467822218
     not_approved_thread_id: int = 5
     approved_thread_id: int = 12
+    rejected_thread_id: int = 199
     db_url: str = f'sqlite+aiosqlite:///{BASE_DIR}/data/db.db'
     
     model_config = SettingsConfigDict(env_file=f"{BASE_DIR}/.env")  
