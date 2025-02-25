@@ -14,16 +14,13 @@ class System(StatesGroup):
     cancel_changes = State()
 
 
-@rt.message(CommandStart())
-async def echo(message: Message):
-    await message.answer(text=f'thread id: {message.message_thread_id}')
+# @rt.message(CommandStart())
+# async def echo(message: Message):
+#     await message.answer(text=f'thread id: {message.message_thread_id}')
 
 
-# Отлов кружочков (потом будет в регистрации, сейчас для отладки)
-@rt.message(F.content_type == ContentType.VIDEO_NOTE)
-async def echo(message: Message):
-    await crud.insert_note(message.video_note.file_id, message.from_user.id)
-    await message.answer(text='Спасибо за кружочек! Мы отправили его на модерацию')
+# Отправка кружков на модерацию
+async def send_not_to_moderation(message: Message):
     await BOT.send_video_note(
         chat_id=settings.group_id, 
         message_thread_id=settings.not_approved_thread_id, 
@@ -45,7 +42,7 @@ async def approve(callback: CallbackQuery, state: FSMContext, callback_data: kb.
 
     # Отправка в отдельную группу для модеров
     await BOT.send_video_note(
-        chat_id=callback.message.chat.id, 
+        chat_id=settings.group_id, 
         message_thread_id=settings.approved_thread_id, 
         video_note=video_note_id,
         reply_markup=kb.reject_kb(
@@ -74,7 +71,7 @@ async def reject(callback: CallbackQuery, state: FSMContext, callback_data: kb.A
 
     # Пересылка кружочка, чтобы не путаться
     note = await BOT.send_video_note(
-        chat_id=callback.message.chat.id, 
+        chat_id=settings.group_id, 
         message_thread_id=callback.message.message_thread_id, 
         video_note=video_note_id,
         reply_markup=kb.cancel_changes(
@@ -108,7 +105,7 @@ async def cancel_changes(callback: CallbackQuery, state: FSMContext, callback_da
 
     # удаление дополнительного сообщения
     await BOT.delete_message(
-        chat_id=callback.message.chat.id,
+        chat_id=settings.group_id,
         message_id=callback_data.dop_message_id
     )
     
@@ -116,7 +113,7 @@ async def cancel_changes(callback: CallbackQuery, state: FSMContext, callback_da
 
 # Добавление описания к отклонению
 @rt.message(System.cancel_changes, Command('/'))
-async def add_description(message: Message, state: FSMContext):
+async def end_rejection(message: Message, state: FSMContext):
     video_note_message_id = await state.get_value('video_note_message_id')
     dop_message_id = await state.get_value('dop_message_id')
     user_id = await state.get_value('user_id')
@@ -132,26 +129,26 @@ async def add_description(message: Message, state: FSMContext):
 
 
     await BOT.delete_message(
-        chat_id=message.chat.id,
+        chat_id=settings.group_id,
         message_id=dop_message_id
     )
     await BOT.delete_message(
-        chat_id=message.chat.id,
+        chat_id=settings.group_id,
         message_id=video_note_message_id
+    )
+    await BOT.send_message(
+        chat_id=settings.group_id,
+        message_thread_id=settings.rejected_thread_id,
+        text=f'=================\n\nКружок ниже отклонен по причине:\n\n{message.text[2:]}'
+    )
+    await BOT.send_video_note(
+        chat_id=settings.group_id,
+        message_thread_id=settings.rejected_thread_id,
+        video_note=video_note_id
     )
     await BOT.send_message(
         chat_id=user_id,
         text=f'{text} Вот причина:\n\n{message.text[2:]}\n\nПопробуйте еще раз!'
-    )
-    await BOT.send_message(
-        chat_id=message.chat.id,
-        message_thread_id=settings.rejected_thread_id,
-        text=f'===========\n\nКружок ниже отклонен по причине:\n\n{message.text[2:]}'
-    )
-    await BOT.send_video_note(
-        chat_id=message.chat.id,
-        message_thread_id=settings.rejected_thread_id,
-        video_note=video_note_id
     )
     await message.delete()
 

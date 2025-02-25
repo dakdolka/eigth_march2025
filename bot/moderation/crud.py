@@ -1,6 +1,6 @@
 from data.database import async_session_factory
 from data import models
-from sqlalchemy import select, update
+from sqlalchemy import select, update, delete
 
 
 async def get_note_id(user_id):
