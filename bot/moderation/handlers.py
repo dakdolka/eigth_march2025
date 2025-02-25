@@ -20,7 +20,7 @@ class System(StatesGroup):
 
 
 # Отправка кружков на модерацию
-async def send_not_to_moderation(message: Message):
+async def send_note_to_moderation(message: Message):
     await BOT.send_video_note(
         chat_id=settings.group_id, 
         message_thread_id=settings.not_approved_thread_id, 
