@@ -21,7 +21,7 @@ class Man(Base):
     tg_id: Mapped[int] = mapped_column(primary_key=True)
     
     circle: Mapped[str] = mapped_column(default="")
-    is_sent: Mapped[bool] = mapped_column(default=False)
+    is_approved: Mapped[bool] = mapped_column(default=False)
     woman_aim: Mapped[str] = mapped_column(ForeignKey("woman.tg_id"), nullable=True)
     
     aim: Mapped["Woman"] = relationship(back_populates="delivers")

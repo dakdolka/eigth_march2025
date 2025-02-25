@@ -59,6 +59,8 @@ async def approve(callback: CallbackQuery, state: FSMContext, callback_data: kb.
         text='Поздравляем! Ваше сообщение было одобрено! Спасибо за участие <3'
     )
 
+    await crud.approve(callback_data.id)
+
 
 # Если отклонено
 @rt.callback_query(kb.Approve.filter(F.is_approved == False))
@@ -92,7 +94,7 @@ async def reject(callback: CallbackQuery, state: FSMContext, callback_data: kb.A
     )
 
 
-#Отказаться от запрета
+# Отказаться от отклонения
 @rt.callback_query(kb.CancelChanges.filter())
 async def cancel_changes(callback: CallbackQuery, state: FSMContext, callback_data: kb.CancelChanges):
     await state.clear()
@@ -151,5 +153,6 @@ async def add_description(message: Message, state: FSMContext):
         message_thread_id=settings.rejected_thread_id,
         video_note=video_note_id
     )
-
     await message.delete()
+
+    await crud.reject(user_id)
