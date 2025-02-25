@@ -7,6 +7,12 @@ from sqlalchemy.sql import func
 import enum, datetime
 from typing import Annotated, Optional 
 
+
+class ModerationState(enum.Enum):
+    PENDING = 'pending'
+    APPROVED = 'approved'
+    REJECTED = 'rejected'
+
 class Woman(Base):
     __tablename__ = "woman"
     
@@ -18,16 +24,22 @@ class Woman(Base):
     
 class Man(Base):
     __tablename__ = "man"
+
     tg_id: Mapped[int] = mapped_column(primary_key=True)
     
-    circle: Mapped[str] = mapped_column(default="")
-    is_approved: Mapped[bool] = mapped_column(default=False)
     woman_aim: Mapped[str] = mapped_column(ForeignKey("woman.tg_id"), nullable=True)
     
+    circle: Mapped[list["Message"]] = relationship(back_populates="man")
     aim: Mapped["Woman"] = relationship(back_populates="delivers")
     
     
+class Message(Base):
+    __tablename__ = 'message'
+
+    sender_tg_id: Mapped[int] = mapped_column(ForeignKey("man.tg_id"), primary_key=True)
+    video_note_id: Mapped[int] = mapped_column(primary_key=True)
+    moderation_state: Mapped[ModerationState] = mapped_column(nullable=True, default=ModerationState.PENDING)
     
-    
+    man: Mapped["Man"] = relationship(back_populates="circle")
     
     
