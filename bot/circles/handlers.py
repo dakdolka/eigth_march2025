@@ -8,6 +8,7 @@ from bot.circles.crud import Orm
 from aiogram.filters.state import StateFilter
 from config import settings, BOT
 from bot.circles import exceptions as ex
+from bot.circles.crud import send_video_notes
 from bot.moderation.handlers import send_note_to_moderation
 rt = Router()
 
@@ -30,7 +31,4 @@ async def save_video_note(message: Message, state: FSMContext):
     
 @rt.message(Command('test_woman_sending'))
 async def check_my(message: Message, state: FSMContext):
-    info = await Orm.send_video(message.from_user.id)
-    await BOT.send_video_note(chat_id=info[1], video_note=info[0])
-    await message.answer(text='кружок отправлен')
-    await Orm.upd_woman_score(info[1])
+    await send_video_notes(BOT)
