@@ -29,7 +29,6 @@ async def echo(message: Message):
 @rt.callback_query(F.data == 'woman')
 async def woman(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Women.description)
-    await state.update_data(chat_id = callback.message.chat.id)
     await callback.message.edit_text(text='бамбам, ждём описание')
     
 @rt.message(Women.description)
