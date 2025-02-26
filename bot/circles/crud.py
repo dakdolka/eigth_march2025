@@ -60,4 +60,4 @@ class Orm:
 
 async def send_video_notes(bot: Bot):
     for elem in await Orm.get_women_circles():
-        await bot.send_video_note(chat_id=elem.man["woman_aim"], video_note=elem.video_note_id)
+        await bot.send_video_note(chat_id=elem.man.woman_aim, video_note=elem.video_note_id)

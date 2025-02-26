@@ -86,7 +86,7 @@ async def reject(callback: CallbackQuery, state: FSMContext, callback_data: kb.A
     await callback.message.delete()
     
     # Дополнительное сообщение (dop_message)
-    message = await callback.message.answer(text='Введите комментарий к отклонению кружка ниже:\n\nНачните сообщение с двойного слеша\nПример:"// не подходит"')
+    message = await callback.message.answer(text='Введите комментарий к отклонению кружка ниже:\n\nНачните сообщение с двойного слеша\nПример:\n <blockquote> // не подходит </blockquote>', parse_mode='HTML')
 
     # Пересылка кружочка, чтобы не путаться
     note = await BOT.send_video_note(
@@ -158,7 +158,8 @@ async def end_rejection(message: Message, state: FSMContext):
     await BOT.send_message(
         chat_id=settings.group_id,
         message_thread_id=settings.rejected_thread_id,
-        text=f'=================\n\nКружок ниже отклонен по причине:\n\n{message.text[2:]}'
+        text=f'=================\nКружок ниже отклонен по причине:\n\n<blockquote>{message.text[2:]}</blockquote>',
+        parse_mode='HTML'
     )
     await BOT.send_video_note(
         chat_id=settings.group_id,
@@ -167,7 +168,8 @@ async def end_rejection(message: Message, state: FSMContext):
     )
     await BOT.send_message(
         chat_id=user_id,
-        text=f'{text} Вот причина:\n\n{message.text[2:]}\n\nПопробуйте еще раз!'
+        text=f'{text} Вот причина:\n\n<blockquote>{message.text[2:]}</blockquote>\n\nПопробуйте еще раз!',
+        parse_mode='HTML'
     )
     await message.delete()
 
