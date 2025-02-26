@@ -6,7 +6,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from bot.circles.crud import Orm
 from aiogram.filters.state import StateFilter
-from config import BOT as bot
+from config import settings, BOT
 rt = Router()
 
 
@@ -21,6 +21,6 @@ async def save_video_note(message: Message, state: FSMContext):
 @rt.message(Command('test_woman_sending'))
 async def check_my(message: Message, state: FSMContext):
     info = await Orm.send_video(message.from_user.id)
-    await bot.send_video_note(chat_id=info[1], video_note=info[0])
+    await BOT.send_video_note(chat_id=info[1], video_note=info[0])
     await message.answer(text='кружок отправлен')
     await Orm.upd_woman_score(info[1])
