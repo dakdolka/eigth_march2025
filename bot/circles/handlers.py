@@ -6,7 +6,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from bot.circles.crud import Orm
 from aiogram.filters.state import StateFilter
-from main import bot
+from config import BOT as bot
 rt = Router()
 
 
