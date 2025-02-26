@@ -7,6 +7,8 @@ from aiogram.fsm.context import FSMContext
 from bot.circles.crud import Orm
 from aiogram.filters.state import StateFilter
 from config import settings, BOT
+from bot.circles import exceptions as ex
+from bot.moderation.handlers import send_note_to_moderation
 rt = Router()
 
 
@@ -16,7 +18,15 @@ class Man(StatesGroup):
 @rt.message(Man.circle, F.video_note)
 async def save_video_note(message: Message, state: FSMContext):
     video_id = message.video_note.file_id
-    await Orm.add_circle(message.from_user.id, video_id)
+    try:
+        await Orm.add_circle(message.from_user.id, video_id)
+    except ex.MessageAlreadyExists:
+        await message.answer(text='Кружочек уже был отправлен')
+        return
+    
+    await send_note_to_moderation(message)
+    
+    
     
 @rt.message(Command('test_woman_sending'))
 async def check_my(message: Message, state: FSMContext):

@@ -42,5 +42,3 @@ class Message(Base):
     moderation_state: Mapped[ModerationState] = mapped_column(nullable=True, default=ModerationState.PENDING)
     
     man: Mapped["Man"] = relationship(back_populates="circle")
-    
-    

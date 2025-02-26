@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from bot.moderation import keyboards as kb
 from bot.moderation import crud 
 from config import BOT, settings
-from bot.moderation import exceptions as ex
+from bot.circles import exceptions as ex
 
 
 rt = Router()
@@ -20,23 +20,19 @@ class System(StatesGroup):
 #     await message.answer(text=f'thread id: {message.message_thread_id}')
 
 
-@rt.message(F.content_type == ContentType.VIDEO_NOTE)
-async def echo(message: Message):
-    try:
-        await crud.insert_note(message.video_note.file_id, message.from_user.id)
-    except ex.MessageAlreadyExists:
-        await message.answer(text='Кружочек уже был отправлен')
-        return
+# @rt.message(F.content_type == ContentType.VIDEO_NOTE)
+# async def echo(message: Message):
+    
 
-    await message.answer(text='Спасибо за кружочек! Мы отправили его на модерацию')
-    await BOT.send_video_note(
-        chat_id=settings.group_id, 
-        message_thread_id=settings.not_approved_thread_id, 
-        video_note=message.video_note.file_id, 
-        reply_markup=kb.approve_kb(
-            id=message.from_user.id
-        )
-    )
+#     await message.answer(text='Спасибо за кружочек! Мы отправили его на модерацию')
+#     await BOT.send_video_note(
+#         chat_id=settings.group_id, 
+#         message_thread_id=settings.not_approved_thread_id, 
+#         video_note=message.video_note.file_id, 
+#         reply_markup=kb.approve_kb(
+#             id=message.from_user.id
+#         )
+#     )
 
 
 # Отправка кружков на модерацию
