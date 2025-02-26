@@ -20,7 +20,7 @@ class Women(StatesGroup):
 async def echo(message: Message):
     flag = await Orm.check_if_exsist(message.from_user.id)
     if not flag:
-        await message.answer(text='ваш пол', reply_markup=kb.start_kb)
+        await message.answer(text='Привет! Кто ты?)', reply_markup=kb.start_kb)
     elif flag == 'woman':
         await message.answer(text='Хотите дополнить описание, пока ждёте поздравление?', reply_markup=kb.change_or_wait)
     elif flag == 'man':

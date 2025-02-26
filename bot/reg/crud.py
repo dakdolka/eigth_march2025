@@ -12,18 +12,15 @@ class Orm:
         async with async_session_factory() as session:
             if await Orm.check_if_exsist(woman['tg_id']) == 'woman':
                 await session.execute(update(Woman).where(Woman.tg_id == woman['tg_id']).values(**woman))
-                print('woman updated')
                 await session.commit()
                 return
             session.add(Woman(**woman))
-            print('woman added')
             await session.commit()
             
     @staticmethod
     async def insert_man(man):
         async with async_session_factory() as session:
             session.add(Man(**man))
-            print('man added')
             await session.commit()
             
     @staticmethod
