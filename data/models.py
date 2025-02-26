@@ -17,7 +17,6 @@ class Woman(Base):
     __tablename__ = "woman"
     
     tg_id: Mapped[str] = mapped_column(primary_key=True)
-    chat_id: Mapped[str]
     description: Mapped[str]
     reg_time: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now())
     circles_reached: Mapped[int] = mapped_column(default=0)

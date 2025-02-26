@@ -7,6 +7,10 @@ from sqlalchemy.orm import joinedload, selectinload, contains_eager
 from data.models import Man, Woman
 
 
+async def sending():
+    pass
+    
+
 class Orm:
     @staticmethod
     async def add_circle(man_id, file_id):
@@ -25,3 +29,7 @@ class Orm:
         async with async_session_factory() as session:
             await session.execute(update(Woman).where(Woman.tg_id == woman_id).values(circles_reached=Woman.circles_reached + 1))
             await session.commit()
+            
+    @staticmethod
+    async def get_women_circles():
+        pass
