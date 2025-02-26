@@ -2,7 +2,6 @@ from aiogram import Dispatcher
 import asyncio
 from config import settings, BOT
 from bot.moderation.handlers import rt as rt_mod
-from config import settings
 from bot.reg.handlers import rt as reg_rt
 from bot.circles.handlers import rt as circle_rt
 
