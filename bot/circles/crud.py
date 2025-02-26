@@ -12,7 +12,7 @@ from data.models import ModerationState
 
 class Orm:
     @staticmethod
-    async def add_circle(note_id, user_id):
+    async def add_circle(user_id, note_id):
         async with async_session_factory() as session:
             check_stmt = select(models.Message).where(
                 and_(

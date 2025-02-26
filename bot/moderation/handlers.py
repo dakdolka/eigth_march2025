@@ -37,6 +37,7 @@ class System(StatesGroup):
 
 # Отправка кружков на модерацию
 async def send_note_to_moderation(message: Message):
+    await message.answer(text='Спасибо за кружочек! Мы отправили его на модерацию')
     await BOT.send_video_note(
         chat_id=settings.group_id, 
         message_thread_id=settings.not_approved_thread_id, 
@@ -51,6 +52,8 @@ async def send_note_to_moderation(message: Message):
 # Если подтверждено
 @rt.callback_query(kb.Approve.filter(F.is_approved == True))
 async def approve(callback: CallbackQuery, state: FSMContext, callback_data: kb.Approve):
+    print(callback_data.id)
+    print('!!!!!!!!!!!!!')
     video_note_id = await crud.get_note_id(callback_data.id)
     await callback.message.delete()
     await callback.answer()
