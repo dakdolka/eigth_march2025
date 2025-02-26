@@ -17,10 +17,10 @@ class Orm:
             await conn.run_sync(Base.metadata.create_all)
             print('tables created')
             async_engine.echo = True
-            
     @staticmethod
-    async def insert_woman(woman):
+    async def add_woman_to_test():
         async with async_session_factory() as session:
-            session.add(Woman(**woman))
-            print('woman added')
+            await session.execute(insert(Woman).values(tg_id=123, description='test'))
             await session.commit()
+            
+    

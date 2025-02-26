@@ -10,3 +10,7 @@ start_kb = InlineKeyboardMarkup(inline_keyboard=[
 approve_desc = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Подтвердить', callback_data='approve_desc'), InlineKeyboardButton(text='Изменить', callback_data='edit_desc')]
 ])
+
+change_or_wait = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='Изменить', callback_data='edit_desc'), InlineKeyboardButton(text='Ждём!', callback_data='wait')]
+])

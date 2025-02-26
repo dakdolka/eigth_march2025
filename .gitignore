@@ -1,2 +1,5 @@
 .venv/
 .env
+__pycache__
+data/db.db
+data/__pycache__/models.cpython-312.pyc
