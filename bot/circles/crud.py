@@ -1,3 +1,4 @@
+from aiogram import Bot
 from sqlalchemy import text, insert, select, func, cast, Integer, and_, update
 from data.database import async_engine, async_session_factory
 # from db.models import metadata_obj
@@ -6,9 +7,8 @@ from data.database import Base
 from sqlalchemy.orm import joinedload, selectinload, contains_eager
 from data import models
 from bot.circles import exceptions as ex
-
+from data.models import Message
 from data.models import ModerationState
-
 
 class Orm:
     @staticmethod
@@ -52,4 +52,12 @@ class Orm:
             
     @staticmethod
     async def get_women_circles():
-        pass
+        async with async_session_factory() as session:
+            query = select(Message).where(Message.moderation_state == ModerationState.APPROVED).options(selectinload(Message.man))
+            result = await session.execute(query)
+            return result.scalars().all()
+    
+
+async def send_video_notes(bot: Bot):
+    for elem in await Orm.get_women_circles():
+        await bot.send_video_note(chat_id=elem.man["woman_aim"], video_note=elem.video_note_id)
