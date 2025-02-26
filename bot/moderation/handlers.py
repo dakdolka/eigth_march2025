@@ -8,7 +8,7 @@ from bot.moderation import crud
 from config import BOT, settings
 from bot.circles import exceptions as ex
 
-from circles.crud import send_video_notes
+from bot.circles.crud import send_video_notes
 
 
 rt = Router()
