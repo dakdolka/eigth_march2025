@@ -27,8 +27,10 @@ async def save_video_note(message: Message, state: FSMContext):
     
     await send_note_to_moderation(message)
     
-    
-    
-@rt.message(Command('test_woman_sending'))
-async def check_my(message: Message, state: FSMContext):
+@rt.message(Command('congratulate'), F.chat.id == settings.group_id)
+async def congratulate(message: Message, state: FSMContext):
     await send_video_notes(BOT)
+    
+# @rt.message(Command('test_woman_sending'))
+# async def check_my(message: Message, state: FSMContext):
+#     await send_video_notes(BOT)

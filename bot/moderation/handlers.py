@@ -176,7 +176,3 @@ async def end_rejection(message: Message, state: FSMContext):
     await message.delete()
 
     await crud.reject(user_id)
-    
-@rt.message(Command('congratulate'), F.chat.id == settings.group_id)
-async def congratulate(message: Message, state: FSMContext):
-    await send_video_notes(BOT)
