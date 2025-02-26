@@ -14,7 +14,6 @@ rt = Router()
 class Women(StatesGroup):
     tg_id = State()
     description = State()
-    chat_id = State()
 
 
 @rt.message(CommandStart())

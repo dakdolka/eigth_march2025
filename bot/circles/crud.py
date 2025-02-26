@@ -49,3 +49,7 @@ class Orm:
         async with async_session_factory() as session:
             await session.execute(update(models.Woman).where(models.Woman.tg_id == woman_id).values(circles_reached=models.Woman.circles_reached + 1))
             await session.commit()
+            
+    @staticmethod
+    async def get_women_circles():
+        pass
