@@ -210,3 +210,6 @@ async def save_video_note(message: Message, state: FSMContext):
     else:
         await message.answer(text='Все кружки готовы!')
         
+@rt.message(Command('stop'), F.chat.id == settings.group_id)
+async def stop(message: Message, state: FSMContext):
+    await state.clear()

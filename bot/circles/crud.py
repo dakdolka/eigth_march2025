@@ -56,8 +56,21 @@ class Orm:
             query = select(Message).where(Message.moderation_state == ModerationState.APPROVED).options(selectinload(Message.man))
             result = await session.execute(query)
             return result.scalars().all()
+        
+    @staticmethod
+    async def get_extra_circles():
+        async with async_session_factory() as session:
+            result = await session.execute(select(Message).where(Message.receiver_id != 0))
+            return result.scalars().all()
     
 
 async def send_video_notes(bot: Bot):
     for elem in await Orm.get_women_circles():
-        await bot.send_video_note(chat_id=elem.man.woman_aim, video_note=elem.video_note_id)
+        try:
+            await bot.send_video_note(chat_id=elem.man.woman_aim, video_note=elem.video_note_id)
+        except:
+            pass
+        
+async def send_extras(bot: Bot):
+    for elem in await Orm.get_extra_circles():
+        await bot.send_video_note(chat_id=elem.receiver_id, video_note=elem.video_note_id)

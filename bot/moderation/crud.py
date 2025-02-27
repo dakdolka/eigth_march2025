@@ -70,4 +70,6 @@ async def send_video_note(woman_id, user_id, video_note):
             )
         )
         await session.execute(stmt)
+        await session.flush()
+        await session.execute(update(models.Woman).where(models.Woman.tg_id == woman_id).values(circles_reached=models.Woman.circles_reached + 1))
         await session.commit()

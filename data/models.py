@@ -17,8 +17,8 @@ class Woman(Base):
     __tablename__ = "woman"
     
     tg_id: Mapped[str] = mapped_column(primary_key=True)
-    name: Mapped[str]
-    surname: Mapped[str]
+    name: Mapped[str] = mapped_column(default='')
+    surname: Mapped[str] = mapped_column(default='')
     description: Mapped[str]
     reg_time: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now())
     circles_reached: Mapped[int] = mapped_column(default=0)
