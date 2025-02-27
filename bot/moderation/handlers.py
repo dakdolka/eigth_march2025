@@ -7,7 +7,10 @@ from bot.moderation import keyboards as kb
 from bot.moderation import crud 
 from config import BOT, settings
 from bot.circles import exceptions as ex
+
 from data import models
+from bot.circles.crud import send_video_notes
+
 
 rt = Router()
 
