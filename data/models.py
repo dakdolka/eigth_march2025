@@ -17,6 +17,8 @@ class Woman(Base):
     __tablename__ = "woman"
     
     tg_id: Mapped[str] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    surname: Mapped[str]
     description: Mapped[str]
     reg_time: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now())
     circles_reached: Mapped[int] = mapped_column(default=0)
@@ -39,5 +41,7 @@ class Message(Base):
     sender_tg_id: Mapped[int] = mapped_column(ForeignKey("man.tg_id"), primary_key=True)
     video_note_id: Mapped[int] = mapped_column(primary_key=True)
     moderation_state: Mapped[ModerationState] = mapped_column(nullable=True, default=ModerationState.PENDING)
+    
+    receiver_id: Mapped[int] = mapped_column(default=0)
     
     man: Mapped["Man"] = relationship(back_populates="circle")

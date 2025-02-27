@@ -20,7 +20,7 @@ class Orm:
     @staticmethod
     async def add_woman_to_test():
         async with async_session_factory() as session:
-            await session.execute(insert(Woman).values(tg_id=123, description='test'))
+            await session.execute(insert(Woman).values(tg_id=123, description='test', name='test', surname='test'))
             await session.commit()
             
     

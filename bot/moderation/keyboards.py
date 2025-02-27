@@ -14,8 +14,9 @@ class CancelChanges(CallbackData, prefix='cancel_changes'):
     id: int
     is_approved_earlier: bool
     dop_message_id: int
-
-
+    
+class CirclesSending(CallbackData, prefix='circles_sending'):
+    id: int
 
 def approve_kb(id):
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -39,3 +40,9 @@ def cancel_changes(id, is_approved_earlier, dop_message_id):
             InlineKeyboardButton(text='Отменить изменения', callback_data=CancelChanges(id=id, is_approved_earlier=is_approved_earlier, dop_message_id=dop_message_id).pack())
         ]
     ])
+    
+def build_keyboard(women: list):
+    builder = InlineKeyboardBuilder()
+    for i in range(len(women)):
+        builder.add(InlineKeyboardButton(text=f'{women[i].name} {women[i].surname}', callback_data=CirclesSending(id=i).pack()))
+    return builder.as_markup()
