@@ -1,14 +1,11 @@
-from aiogram import Router, F, Bot
-from aiogram.filters import CommandStart, Command, callback_data
-from aiogram.types import Message, CallbackQuery, ContentType, VideoNote
+from aiogram import Router, F
+from aiogram.filters import Command, CommandStart
+from aiogram.types import Message, CallbackQuery, ContentType
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from bot.moderation import keyboards as kb
 from bot.moderation import crud 
 from config import BOT, settings
-from bot.circles import exceptions as ex
-
-from data import models
 from bot.circles.crud import Orm
 
 
@@ -180,41 +177,3 @@ async def end_rejection(message: Message, state: FSMContext):
     await message.delete()
 
     await crud.reject(user_id)
-    
-@rt.message(Command('add_circles'), F.chat.id == settings.group_id)
-async def add_circles(message: Message, state: FSMContext):
-    extras = await crud.who_needs_circles()
-    if len(extras) == 0:
-        await message.answer(text='Все кружки готовы!')
-        return
-    pers = extras.pop()
-    await state.update_data(extras=extras)
-    print(pers)
-    await message.answer(text=f'{pers.name} {pers.surname}\n{pers.description}')
-    await state.update_data(woman_to_send=pers)
-    await state.set_state(System.admin_circle)
-
-
-@rt.message(System.admin_circle, F.video_note)
-async def save_video_note(message: Message, state: FSMContext):
-    video_id = message.video_note.file_id
-    woman: models.Woman = await state.get_value('woman_to_send')
-    print(woman)
-    await crud.send_video_note(
-        woman.tg_id,
-        message.from_user.id,
-        video_id
-    )
-    extras = (await state.get_data())['extras']
-    if len(extras) > 0:
-        pers = extras.pop()
-        await state.update_data(extras=extras)
-        await message.answer(text=f'{pers.name} {pers.surname}\n{pers.description}')
-        await state.update_data(woman_to_send=pers)
-        await state.set_state(System.admin_circle)
-    else:
-        await message.answer(text='Все кружки готовы!')
-        
-@rt.message(Command('stop'), F.chat.id == settings.group_id)
-async def stop(message: Message, state: FSMContext):
-    await state.clear()

@@ -1,7 +1,4 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-from aiogram.filters import callback_data
-from aiogram.filters.callback_data import CallbackData
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 start_kb = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='М', callback_data='man'), InlineKeyboardButton(text='Ж', callback_data='woman')]

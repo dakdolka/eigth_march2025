@@ -1,11 +1,7 @@
-from sqlalchemy import Boolean, Column, Table, Integer, String, MetaData, ForeignKey, and_, func, JSON, ARRAY, UniqueConstraint, Date, or_, Enum
-from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from data.database import Base
-from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.sql import func
 import enum, datetime
-from typing import Annotated, Optional 
 
 
 class ModerationState(enum.Enum):

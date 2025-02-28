@@ -1,9 +1,5 @@
-from sqlalchemy import text, insert, select, func, cast, Integer, and_, update
-from data.database import async_engine, async_session_factory
-# from db.models import metadata_obj
-from sqlalchemy.orm import aliased
-from data.database import Base
-from sqlalchemy.orm import joinedload, selectinload, contains_eager
+from sqlalchemy import select, func, update
+from data.database import async_session_factory
 from data.models import Man, Woman
 
 class Orm:

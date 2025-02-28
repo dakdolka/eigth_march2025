@@ -1,9 +1,7 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from sqlalchemy.orm import Session, DeclarativeBase, sessionmaker
-from sqlalchemy import URL, create_engine, text, String
-# from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy import  String
 from config import settings
-# import asyncio
 from typing import Annotated
 
 async_engine = create_async_engine( #асинзронный движок

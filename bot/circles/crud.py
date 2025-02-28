@@ -1,10 +1,7 @@
 from aiogram import Bot
-from sqlalchemy import text, insert, select, func, cast, Integer, and_, update
-from data.database import async_engine, async_session_factory
-# from db.models import metadata_obj
-from sqlalchemy.orm import aliased
-from data.database import Base
-from sqlalchemy.orm import joinedload, selectinload, contains_eager
+from sqlalchemy import insert, select, and_, update
+from data.database import async_session_factory
+from sqlalchemy.orm import selectinload
 from data import models
 from bot.circles import exceptions as ex
 from data.models import Message
@@ -63,6 +60,34 @@ class Orm:
         async with async_session_factory() as session:
             result = await session.execute(select(Message).where(Message.receiver_id != 0))
             return result.scalars().all()
+        
+    @staticmethod
+    async def who_needs_circles():
+        async with async_session_factory() as session:
+            stmt = (
+                select(models.Woman)
+                .where(
+                    models.Woman.circles_reached == 0
+                )
+            )
+            result = await session.execute(stmt)
+            return result.scalars().all()
+    
+    @staticmethod
+    async def send_video_note(woman_id, user_id, video_note):
+        async with async_session_factory() as session:
+            stmt = (
+                insert(models.Message).values(
+                    sender_tg_id=user_id,
+                    video_note_id=video_note,
+                    moderation_state=ModerationState.APPROVED,
+                    receiver_id=woman_id
+                )
+            )
+            await session.execute(stmt)
+            await session.flush()
+            await session.execute(update(models.Woman).where(models.Woman.tg_id == woman_id).values(circles_reached=models.Woman.circles_reached + 1))
+            await session.commit()
     
 
 async def send_video_notes(bot: Bot):
@@ -75,3 +100,5 @@ async def send_video_notes(bot: Bot):
 async def send_extras(bot: Bot):
     for elem in await Orm.get_extra_circles():
         await bot.send_video_note(chat_id=elem.receiver_id, video_note=elem.video_note_id)
+        
+
