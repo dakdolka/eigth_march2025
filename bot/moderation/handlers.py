@@ -9,7 +9,7 @@ from config import BOT, settings
 from bot.circles import exceptions as ex
 
 from data import models
-from bot.circles.crud import send_video_notes
+from bot.circles.crud import Orm
 
 
 rt = Router()
@@ -78,6 +78,8 @@ async def approve(callback: CallbackQuery, state: FSMContext, callback_data: kb.
         chat_id=callback_data.id, 
         text='Поздравляем! Ваше сообщение было одобрено! Спасибо за участие <3'
     )
+    
+    await Orm.upd_woman_score(callback_data.id)
 
     await crud.approve(callback_data.id)
 
@@ -182,6 +184,9 @@ async def end_rejection(message: Message, state: FSMContext):
 @rt.message(Command('add_circles'), F.chat.id == settings.group_id)
 async def add_circles(message: Message, state: FSMContext):
     extras = await crud.who_needs_circles()
+    if len(extras) == 0:
+        await message.answer(text='Все кружки готовы!')
+        return
     pers = extras.pop()
     await state.update_data(extras=extras)
     print(pers)

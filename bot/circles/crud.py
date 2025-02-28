@@ -45,9 +45,10 @@ class Orm:
             return video_id, woman_tg_id
         
     @staticmethod
-    async def upd_woman_score(woman_id):
+    async def upd_woman_score(man_id):
         async with async_session_factory() as session:
-            await session.execute(update(models.Woman).where(models.Woman.tg_id == woman_id).values(circles_reached=models.Woman.circles_reached + 1))
+            man: models.Man = (await session.execute(select(models.Man).where(models.Man.tg_id == man_id).options(selectinload(models.Man.aim)))).scalars().first()
+            await session.execute(update(models.Woman).where(models.Woman.tg_id == man.aim.tg_id).values(circles_reached=int(man.aim.circles_reached) + 1))
             await session.commit()
             
     @staticmethod

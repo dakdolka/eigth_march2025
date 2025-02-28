@@ -16,8 +16,8 @@ class Women(StatesGroup):
     name = State()
     surname = State()
     description = State()
-
-
+    
+    
 @rt.message(CommandStart())
 async def echo(message: Message):
     flag = await Orm.check_if_exsist(message.from_user.id)
@@ -69,7 +69,6 @@ async def man(callback: CallbackQuery, state: FSMContext):
     woman = await Orm.suggest_woman()
     await state.update_data(woman=woman)
     await callback.message.edit_text(text=f'Ваша цель: {woman.name} {woman.surname}\nОписание:\n{woman.description}', reply_markup=kb.approve_circling)
-    await state.set_state(Man.circle)
     await Orm.insert_man({'tg_id': callback.from_user.id, 'woman_aim': woman.tg_id})
     
 
@@ -77,6 +76,7 @@ async def man(callback: CallbackQuery, state: FSMContext):
 async def approve_circling(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     woman = (await state.get_data())['woman']
+    await state.set_state(Man.circle)
     await callback.message.edit_text(text=f'Ваша цель: {woman.name} {woman.surname}\nОписание:\n{woman.description}\n\nОтлично, будем ждать вашего поздравления, когда будете готовы - просто отправляйте кружок в этот чат. Если от бота не последует реакции - пишите сюда @dak_dolka' )
     
     
@@ -95,4 +95,6 @@ async def reject_rejecting_circling(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     woman = (await state.get_data())['woman']
     await callback.message.edit_text(text=f'Правльное решение :)\nВаша цель: {woman.name} {woman.surname}\nОписание:\n{woman.description}\nКогда будете готовы - просто отправляйте кружок в этот чат. Если от бота не последует реакции - пишите сюда @dak_dolka')
+    
+
     
