@@ -37,19 +37,19 @@ async def woman(callback: CallbackQuery, state: FSMContext):
 async def save_name(message: Message, state: FSMContext):
     await state.update_data(name_sur=message.text)
     await state.set_state(Women.description)
-    await message.answer(text=f'Теперь, расскажите что-нибудь о себе, например: \n Я Маша, мне 16 лет, люблю решать иррациональные уравнения!)')
+    await message.answer(text=f'Теперь, расскажите что-нибудь о себе, например: \nЯ Маша, мне 16 лет, люблю решать иррациональные уравнения!)')
     
 @rt.message(Women.description)
 async def description(message: Message, state: FSMContext):
     await state.update_data(tg_id=message.from_user.id, description=message.text)
     await state.set_state(None)
-    await message.answer(text=f'Текущее описание: {(await state.get_data())["description"]}\n Для продолжения подтвердите, что описание корректно :)', reply_markup=kb.approve_desc)
+    await message.answer(text=f'Текущее описание: {(await state.get_data())["description"]}\nДля продолжения подтвердите, что описание корректно :)', reply_markup=kb.approve_desc)
     
 @rt.callback_query(F.data == 'edit_desc')
 async def edit_desc(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await state.set_state(Women.description)
-    await callback.message.edit_text(text=f'Текущее описание: {(await state.get_data())['description']}\n Отправьте изменённое описание.')
+    await callback.message.edit_text(text=f'Текущее описание: {(await state.get_data())['description']}\nОтправьте изменённое описание.')
     
 @rt.callback_query(F.data == 'approve_desc')
 async def approve_desc(callback: CallbackQuery, state: FSMContext):
@@ -63,7 +63,7 @@ async def approve_desc(callback: CallbackQuery, state: FSMContext):
 #     flag = await Orm.check_if_exsist(message.from_user.id)
 #     if flag == 'woman':
 #         await state.set_state(Women.description)
-#         await message.answer(text=f'Текущее: {(await state.get_data())["description"]}\n введите описание')
+#         await message.answer(text=f'Текущее: {(await state.get_data())["description"]}\nвведите описание')
 #     elif flag == 'man':
 #         await message.answer(text='Какие мы любопытные! Эта кнопочка только для деовчек :)')
 #     else:

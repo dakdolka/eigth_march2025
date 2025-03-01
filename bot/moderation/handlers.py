@@ -89,7 +89,7 @@ async def reject(callback: CallbackQuery, state: FSMContext, callback_data: kb.A
     await callback.message.delete()
     
     # Дополнительное сообщение (dop_message)
-    message = await callback.message.answer(text='Введите комментарий к отклонению кружка ниже:\n\nНачните сообщение с двойного слеша\nПример:\n <blockquote> // не подходит </blockquote>', parse_mode='HTML')
+    message = await callback.message.answer(text='Введите комментарий к отклонению кружка ниже:\n\nНачните сообщение с двойного слеша\nПример:\n<blockquote> // не подходит </blockquote>', parse_mode='HTML')
 
     # Пересылка кружочка, чтобы не путаться
     note = await BOT.send_video_note(
