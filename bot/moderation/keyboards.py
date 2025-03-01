@@ -42,5 +42,5 @@ def cancel_changes(id, is_approved_earlier, dop_message_id):
 def build_keyboard(women: list):
     builder = InlineKeyboardBuilder()
     for i in range(len(women)):
-        builder.add(InlineKeyboardButton(text=f'{women[i].name} {women[i].surname}', callback_data=CirclesSending(id=i).pack()))
+        builder.add(InlineKeyboardButton(text=f'{women[i].name_sur}', callback_data=CirclesSending(id=i).pack()))
     return builder.as_markup()

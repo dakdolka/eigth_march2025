@@ -8,13 +8,16 @@ class ModerationState(enum.Enum):
     PENDING = 'pending'
     APPROVED = 'approved'
     REJECTED = 'rejected'
+    
+class MenStatus(enum.Enum):
+    OPEN = 'open'
+    CLOSED = 'closed'
 
 class Woman(Base):
     __tablename__ = "woman"
     
     tg_id: Mapped[str] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(default='')
-    surname: Mapped[str] = mapped_column(default='')
+    name_sur: Mapped[str] 
     description: Mapped[str]
     reg_time: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now())
     circles_reached: Mapped[int] = mapped_column(default=0)
@@ -41,3 +44,8 @@ class Message(Base):
     receiver_id: Mapped[int] = mapped_column(default=0)
     
     man: Mapped["Man"] = relationship(back_populates="circle")
+    
+class Service(Base):
+    __tablename__ = "service"
+    man_id: Mapped[int] = mapped_column(primary_key=True)
+    

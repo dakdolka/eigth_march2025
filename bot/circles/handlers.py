@@ -25,17 +25,18 @@ async def save_video_note(message: Message, state: FSMContext):
         return
     
     await send_note_to_moderation(message)
+    await state.clear()
     
 @rt.message(Command('add_circles'), F.chat.id == settings.group_id)
 async def add_circles(message: Message, state: FSMContext):
+    await state.clear()
     extras = await Orm.who_needs_circles()
     if len(extras) == 0:
         await message.answer(text='Все кружки готовы!')
         return
     pers = extras.pop()
     await state.update_data(extras=extras)
-    print(pers)
-    await message.answer(text=f'{pers.name} {pers.surname}\n{pers.description}')
+    await message.answer(text=f'{pers.name_sur}\n{pers.description}')
     await state.update_data(woman_to_send=pers)
     await state.set_state(System.admin_circle)
 
@@ -44,7 +45,6 @@ async def add_circles(message: Message, state: FSMContext):
 async def save_video_note(message: Message, state: FSMContext):
     video_id = message.video_note.file_id
     woman: models.Woman = await state.get_value('woman_to_send')
-    print(woman)
     await Orm.send_video_note(
         woman.tg_id,
         message.from_user.id,
@@ -54,7 +54,7 @@ async def save_video_note(message: Message, state: FSMContext):
     if len(extras) > 0:
         pers = extras.pop()
         await state.update_data(extras=extras)
-        await message.answer(text=f'{pers.name} {pers.surname}\n{pers.description}')
+        await message.answer(text=f'{pers.name_sur}\n{pers.description}')
         await state.update_data(woman_to_send=pers)
         await state.set_state(System.admin_circle)
     else:

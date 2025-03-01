@@ -1,6 +1,16 @@
-from sqlalchemy import select, func, update
+from sqlalchemy import delete, insert, select, func, update
 from data.database import async_session_factory
-from data.models import Man, Woman
+from data.models import Man, Woman, Service
+
+from config import BOT as bot
+import bot.reg.keyboards as kb
+
+
+async def remind():
+    for elem in await Orm.who_needs_remind():
+        await bot.send_message(chat_id=elem.man_id, text='Время пришло! Нажмите накнопку ниже, и мы выдадим вашу цель :)', reply_markup=kb.extra_kb)
+    await Orm.kill_service()
+        
 
 class Orm:
     @staticmethod
@@ -12,6 +22,15 @@ class Orm:
                 return
             session.add(Woman(**woman))
             await session.commit()
+        async with async_session_factory() as session:
+            service = (await session.execute(select(Service))).scalars().all()
+            if service is not None:
+                women = (await session.execute(select(Woman))).scalars().all()
+                if len(women) > 10: #TODO изменить
+                    await remind()
+                    await session.commit()
+            
+            
             
     @staticmethod
     async def insert_man(man):
@@ -37,4 +56,42 @@ class Orm:
             woman: Woman = await session.execute(select(Woman).filter(Woman.circles_reached == min_sircles).order_by(Woman.reg_time))
             woman: Woman = woman.scalars().first()
             return woman
+        
+    @staticmethod
+    async def who_needs_remind():
+        async with async_session_factory() as session:
+            stmt = (
+                select(Service)
+            )
+            res = await session.execute(stmt)
+            res = res.scalars().all()
+            return res
+        
+    @staticmethod
+    async def kill_service():
+        async with async_session_factory() as session:
+            await session.execute(delete(Service))
+            await session.commit()
+            
+    @staticmethod
+    async def check_is_open():
+        async with async_session_factory() as session:
+            stmt = (
+                select(Woman)
+            )
+            res = await session.execute(stmt)
+            res = res.scalars().all()
+            print(res)
+            if len(res) > 10:
+                return True
+            return False
+    
+    @staticmethod
+    async def set_remind(id):
+        async with async_session_factory() as session:
+            stmt = (
+                insert(Service).values(man_id=id)
+            )
+            await session.execute(stmt)
+            await session.commit()
             

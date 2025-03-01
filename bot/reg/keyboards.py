@@ -21,3 +21,9 @@ reject_rejecting_circling = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Да, я не хочу записывать.', callback_data='final_reject_circling')],
     [InlineKeyboardButton(text='Нет, кружочку быть!', callback_data='comeback')]
 ])
+
+extra_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text='Поехали!', callback_data='man')]
+    ]
+)

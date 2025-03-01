@@ -175,5 +175,7 @@ async def end_rejection(message: Message, state: FSMContext):
         parse_mode='HTML'
     )
     await message.delete()
-
     await crud.reject(user_id)
+
+
+    
