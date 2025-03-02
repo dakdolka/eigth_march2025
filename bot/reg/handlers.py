@@ -88,6 +88,7 @@ async def approve_circling(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     woman = (await state.get_data())['woman']
     await state.set_state(Man.circle)
+    await Orm.upd_possible_circles(woman.tg_id)
     await callback.message.edit_text(text=f'Ваша цель: {woman.name_sur}\nОписание:\n{woman.description}\n\nОтлично, будем ждать вашего поздравления, когда будете готовы - просто отправляйте кружок в этот чат. Если от бота не последует реакции - пишите сюда @dak_dolka' )
     
     
@@ -106,6 +107,7 @@ async def reject_rejecting_circling(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     woman = (await state.get_data())['woman']
     await state.set_state(Man.circle)
+    await Orm.upd_possible_circles(woman.tg_id)
     await callback.message.edit_text(text=f'Правльное решение :)\nВаша цель: {woman.name_sur}\nОписание:\n{woman.description}\n\nКогда будете готовы - просто отправляйте кружок в этот чат. Если от бота не последует реакции - пишите сюда @dak_dolka')
     
 

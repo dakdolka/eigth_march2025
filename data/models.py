@@ -21,6 +21,7 @@ class Woman(Base):
     description: Mapped[str]
     reg_time: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now())
     circles_reached: Mapped[int] = mapped_column(default=0)
+    circles_possible: Mapped[int] = mapped_column(default=0)
     delivers: Mapped[list["Man"]] = relationship(back_populates="aim")
     
 class Man(Base):

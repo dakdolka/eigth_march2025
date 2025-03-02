@@ -29,6 +29,12 @@ class Orm:
                 if len(women) > 1: #TODO изменить
                     await remind()
                     await session.commit()
+                    
+    @staticmethod
+    async def upd_possible_circles(woman_id):
+        async with async_session_factory() as session:
+            await session.execute(update(Woman).where(Woman.tg_id == woman_id).values(circles_possible=Woman.circles_possible + 1))
+            await session.commit()
             
             
             
@@ -52,8 +58,8 @@ class Orm:
     @staticmethod
     async def suggest_woman():
         async with async_session_factory() as session:
-            min_sircles = (await session.execute(select(func.min(Woman.circles_reached)))).scalars().first()
-            woman: Woman = await session.execute(select(Woman).filter(Woman.circles_reached == min_sircles).order_by(Woman.reg_time))
+            min_sircles = (await session.execute(select(func.min(Woman.circles_possible)))).scalars().first()
+            woman: Woman = await session.execute(select(Woman).filter(Woman.circles_possible == min_sircles).order_by(Woman.reg_time))
             woman: Woman = woman.scalars().first()
             return woman
         
