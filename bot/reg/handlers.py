@@ -43,7 +43,7 @@ async def save_name(message: Message, state: FSMContext):
 async def description(message: Message, state: FSMContext):
     await state.update_data(tg_id=message.from_user.id, description=message.text)
     await state.set_state(None)
-    await message.answer(text=f'Текущее описание: {(await state.get_data())["description"]}\nДля продолжения подтвердите, что описание корректно :)', reply_markup=kb.approve_desc)
+    await message.answer(text=f'Текущее описание: {(await state.get_data())["description"]}\n\nДля продолжения подтвердите, что описание корректно :)', reply_markup=kb.approve_desc)
     
 @rt.callback_query(F.data == 'edit_desc')
 async def edit_desc(callback: CallbackQuery, state: FSMContext):
@@ -106,7 +106,7 @@ async def reject_rejecting_circling(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     woman = (await state.get_data())['woman']
     await state.set_state(Man.circle)
-    await callback.message.edit_text(text=f'Правльное решение :)\nВаша цель: {woman.name_sur}\nОписание:\n{woman.description}\nКогда будете готовы - просто отправляйте кружок в этот чат. Если от бота не последует реакции - пишите сюда @dak_dolka')
+    await callback.message.edit_text(text=f'Правльное решение :)\nВаша цель: {woman.name_sur}\nОписание:\n{woman.description}\n\nКогда будете готовы - просто отправляйте кружок в этот чат. Если от бота не последует реакции - пишите сюда @dak_dolka')
     
 
     
