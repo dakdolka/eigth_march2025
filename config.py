@@ -18,4 +18,3 @@ class Settings(BaseSettings):
 settings = Settings()
 
 BOT = Bot(token=settings.token)
-print(settings.token)

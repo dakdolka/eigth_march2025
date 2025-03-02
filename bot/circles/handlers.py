@@ -25,7 +25,6 @@ async def save_video_note(message: Message, state: FSMContext):
         return
     
     await send_note_to_moderation(message)
-    await state.clear()
     
 @rt.message(Command('add_circles'), F.chat.id == settings.group_id)
 async def add_circles(message: Message, state: FSMContext):
