@@ -12,8 +12,8 @@ class Orm:
     async def create_all():
         async with async_engine.begin() as conn:
             async_engine.echo = False
-            await conn.run_sync(Base.metadata.drop_all)
-            print('tables dropped')
+            # await conn.run_sync(Base.metadata.drop_all)
+            # print('tables dropped')
             await conn.run_sync(Base.metadata.create_all)
             print('tables created')
             async_engine.echo = True
