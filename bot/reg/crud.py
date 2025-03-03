@@ -61,8 +61,8 @@ class Orm:
     async def suggest_woman():
         async with async_session_factory() as session:
             min_sircles = (await session.execute(select(func.min(Woman.circles_possible)))).scalars().first()
-            women: Woman = await session.execute(select(Woman).filter(Woman.circles_possible == min_sircles).order_by(Woman.reg_time))
-            women: Woman = women.scalars().all()
+            women = await session.execute(select(Woman).filter(Woman.circles_possible == min_sircles).order_by(Woman.reg_time))
+            women = women.scalars().all()
             woman = random.choice(women)
             return woman
         
