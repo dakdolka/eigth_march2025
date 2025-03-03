@@ -16,7 +16,7 @@ dp.include_router(circle_rt)
 
 async def main():
     await Orm.create_all()
-    # await Orm.add_woman_to_test()
+    await Orm.enable_wal()
     await dp.start_polling(BOT)
     
 if __name__ == '__main__':

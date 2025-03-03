@@ -17,6 +17,12 @@ class Orm:
             await conn.run_sync(Base.metadata.create_all)
             print('tables created')
             async_engine.echo = True
+            
+    @staticmethod
+    async def enable_wal():
+        async with async_engine.connect() as connection:
+            await connection.execute('PRAGMA journal_mode = WAL;')
+        
     @staticmethod
     async def add_woman_to_test():
         async with async_session_factory() as session:
