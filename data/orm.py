@@ -21,7 +21,7 @@ class Orm:
     @staticmethod
     async def enable_wal():
         async with async_engine.connect() as connection:
-            await connection.execute('PRAGMA journal_mode = WAL;')
+            await connection.execute(text('PRAGMA journal_mode = WAL;'))
         
     @staticmethod
     async def add_woman_to_test():
