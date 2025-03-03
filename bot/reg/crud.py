@@ -28,7 +28,7 @@ class Orm:
             service = (await session.execute(select(Service))).scalars().all()
             if service is not None:
                 women = (await session.execute(select(Woman))).scalars().all()
-                if len(women) > 1: #TODO изменить
+                if len(women) > 8: #TODO изменить
                     await remind()
                     await session.commit()
                     
@@ -91,7 +91,7 @@ class Orm:
             res = await session.execute(stmt)
             res = res.scalars().all()
             print(res)
-            if len(res) > 1: #TODO изменить
+            if len(res) > 8: #TODO изменить
                 return True
             return False
     
