@@ -5,6 +5,8 @@ from data.models import Man, Woman, Service
 from config import BOT as bot
 import bot.reg.keyboards as kb
 
+import random
+
 
 async def remind():
     for elem in await Orm.who_needs_remind():
@@ -59,8 +61,9 @@ class Orm:
     async def suggest_woman():
         async with async_session_factory() as session:
             min_sircles = (await session.execute(select(func.min(Woman.circles_possible)))).scalars().first()
-            woman: Woman = await session.execute(select(Woman).filter(Woman.circles_possible == min_sircles).order_by(Woman.reg_time))
-            woman: Woman = woman.scalars().first()
+            women: Woman = await session.execute(select(Woman).filter(Woman.circles_possible == min_sircles).order_by(Woman.reg_time))
+            women: Woman = women.scalars().all()
+            woman = random.choice(women)
             return woman
         
     @staticmethod
